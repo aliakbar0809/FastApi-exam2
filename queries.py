@@ -3,7 +3,7 @@ from fastapi import HTTPException
 import asyncpg
 
 # CRUD FROM USERS
-async def create_user(username:str,email:str,password:int):
+async def create_user(username:str,email:str,password:str):
     async with get_connection()as conn:
         try:
             user_id = await conn.fetchval(
@@ -21,7 +21,7 @@ async def create_user(username:str,email:str,password:int):
 
 async def get_users():
     async with get_connection() as conn:
-        rows = await conn.fecth("SELECT * FROM users")
+        rows = await conn.fetch("SELECT * FROM users")
         return [dict(row) for row in rows]
     
 
@@ -35,7 +35,7 @@ async def get_user_by_id(id:int):
     
 
 
-async def update_user(id:int,username:str,email:str,password:int):
+async def update_user(id:int,username:str,email:str,password:str):
     async with get_connection() as conn:
         try:
             res = await conn.fecthrow(

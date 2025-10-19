@@ -7,13 +7,15 @@ from queries import *
 app = FastAPI(title="Users and Products CRUD", description="API для CRUD", version="1.0.0")
 
 class UserCreate(BaseModel):
-    name:str
+    username:str
     email:str
+    password:str
 
 class UserResponse(BaseModel):
     id:int
-    name:str
+    username:str
     email:str
+    password:str
 
 
 @app.get("/user{user_id}",response_model=dict,summary="Напишите id который вы хотите увидеть!")
@@ -28,8 +30,8 @@ async def get_user_endpoint(user_id:int):
 
 @app.post("/c_users",response_model=UserResponse,summary="Создайте нового пользователя!")
 async def create_users_endpoint(user:UserCreate):
-    user_id = await create_user(user.name,user.email)
-    return UserResponse(id=user_id,name=user.name,email=user.email)
+    user_id = await create_user(user.username,user.email,user.password)
+    return UserResponse(id=user_id,username=user.username,email=user.email,password=user.password)
 
 
 
@@ -45,7 +47,7 @@ async def list_users_endpoint():
 
 @app.put("/user_update/{user_id}", response_model=UserResponse, summary="Обновить данные пользователя")
 async def update_user_endpoint(user_id: int, user: UserCreate):
-    updated_user = await update_user(user_id, user.name, user.email)
+    updated_user = await update_user(user_id, user.username, user.email,user.password)
     return updated_user
 
 
